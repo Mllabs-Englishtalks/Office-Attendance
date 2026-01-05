@@ -1,189 +1,173 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <base target="_top">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Office Attendance</title>
-    <style>
-        :root {
-            --primary: #2563eb;
-            --success: #16a34a;
-            --danger: #dc2626;
-            --bg: #f8fafc;
-        }
-
-        body {
-            margin: 0;
-            font-family: Inter, Arial, sans-serif;
-            background: var(--bg);
-        }
-
-        .container {
-            max-width: 420px;
-            margin: 80px auto;
-            background: white;
-            padding: 28px;
-            border-radius: 14px;
-            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.08);
-        }
-
-        h1 {
-            margin: 0 0 10px;
-            text-align: center;
-            color: var(--primary);
-        }
-
-        p.subtitle {
-            text-align: center;
-            font-size: 14px;
-            color: #64748b;
-            margin-bottom: 25px;
-        }
-
-        select,
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 12px;
-            border-radius: 8px;
-            font-size: 15px;
-        }
-
-        select {
-            border: 1px solid #cbd5e1;
-        }
-
-        button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
-        }
-
-        #status {
-            margin-top: 18px;
-            font-weight: 600;
-            text-align: center;
-            min-height: 24px;
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                margin: 40px 15px;
-            }
-        }
-    </style>
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Office Attendance</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --bg: #f8fafc;
+    }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
+    }
+    .container {
+      max-width: 420px;
+      margin: 80px auto;
+      background: white;
+      padding: 28px;
+      border-radius: 14px;
+      box-shadow: 0 20px 30px rgba(0,0,0,0.08);
+    }
+    h1 {
+      margin: 0 0 10px;
+      text-align: center;
+      color: var(--primary);
+    }
+    p.subtitle {
+      text-align: center;
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 25px;
+    }
+    select, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+    select {
+      border: 1px solid #cbd5e1;
+    }
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+    #status {
+      margin-top: 18px;
+      font-weight: 600;
+      text-align: center;
+      min-height: 24px;
+    }
+    @media (max-width: 480px) {
+      .container {
+        margin: 40px 15px;
+      }
+    }
+  </style>
 </head>
-
 <body>
-    <div class="container">
-        <h1>Office Attendance</h1>
-        <p class="subtitle">Location-verified check-in & check-out</p>
+  <div class="container">
+    <h1>Office Attendance</h1>
+    <p class="subtitle">Location-verified check-in & check-out</p>
 
-        <select id="name">
-            <option value="">Select your name</option>
-            <option value="Umer Farooq">Umer Farooq</option>
-            <option value="Mudassir Ahmed">Mudassir Ahmed</option>
-            <option value="Syed Muhammed Shaheer">Syed Muhammed Shaheer</option>
-            <option value="Armaan Hussain">Armaan</option>
-        </select>
+    <select id="name">
+      <option value="">Select your name</option>
+      <option value="Umer Farooq">Umer Farooq</option>
+      <option value="Mudassir Ahmed">Mudassir Ahmed</option>
+      <option value="Syed Muhammed Shaheer">Syed Muhammed Shaheer</option>
+      <option value="Armaan Hussain">Armaan</option>
+    </select>
 
-        <select id="action">
-            <option value="">Select action</option>
-            <option value="CHECK_IN">Check In</option>
-            <option value="CHECK_OUT">Check Out</option>
-        </select>
+    <select id="action">
+      <option value="">Select action</option>
+      <option value="CHECK_IN">Check In</option>
+      <option value="CHECK_OUT">Check Out</option>
+    </select>
 
-        <button id="submitBtn" onclick="startFlow()">Submit</button>
+    <button id="submitBtn" onclick="startFlow()">Submit</button>
 
-        <div id="status"></div>
-    </div>
+    <div id="status"></div>
+  </div>
 
-    <script>
-        function startFlow() {
-            const name = document.getElementById("name").value;
-            const action = document.getElementById("action").value;
-            const status = document.getElementById("status");
-            const btn = document.getElementById("submitBtn");
+  <script>
+    function startFlow() {
+      const name = document.getElementById("name").value;
+      const action = document.getElementById("action").value;
+      const status = document.getElementById("status");
+      const btn = document.getElementById("submitBtn");
 
-            if (!name || !action) {
-                status.textContent = "Please complete all fields.";
-                status.style.color = "var(--danger)";
-                return;
-            }
+      if (!name || !action) {
+        status.textContent = "Please complete all fields.";
+        status.style.color = "var(--danger)";
+        return;
+      }
 
-            if (!navigator.geolocation) {
-                status.textContent = "Geolocation is not supported by your browser.";
-                status.style.color = "var(--danger)";
-                return;
-            }
+      if (!navigator.geolocation) {
+        status.textContent = "Geolocation is not supported by your browser.";
+        status.style.color = "var(--danger)";
+        return;
+      }
 
-            btn.disabled = true;
-            status.textContent = "Getting your location…";
-            status.style.color = "";
+      btn.disabled = true;
+      status.textContent = "Getting your location…";
+      status.style.color = "";
 
-            navigator.geolocation.getCurrentPosition(
-                position => submit(position, name, action),
-                error => {
-                    status.textContent = "Location access denied or failed. Please allow location and try again.";
-                    status.style.color = "var(--danger)";
-                    btn.disabled = false;
-                },
-                { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
-            );
+      navigator.geolocation.getCurrentPosition(
+        position => submit(position, name, action),
+        error => {
+          status.textContent = "Location access denied or failed. Please allow location permission and try again.";
+          status.style.color = "var(--danger)";
+          btn.disabled = false;
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+      );
+    }
+
+    function submit(position, name, action) {
+      const status = document.getElementById("status");
+      const btn = document.getElementById("submitBtn");
+
+      const webAppUrl = "https://script.google.com/macros/s/AKfycbynNxiPxcfFSIBFZ5TsTX-2UJMXagIipm6isKpUMiBy1SuRCC0vyhxaY6Yr4bJknKHTDQ/exec";
+
+      status.textContent = "Submitting attendance…";
+      status.style.color = "";
+
+      fetch(webAppUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name,
+          action: action,
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        }),
+        redirect: "follow"
+      })
+      .then(response => response.json())
+      .then(result => {
+        if (result.status === "VALID") {
+          status.textContent = `Success ✔ (${result.distance}m from office)`;
+          status.style.color = "var(--success)";
+        } else if (result.status === "OUT_OF_RANGE") {
+          status.textContent = `Outside office ❌ (${result.distance}m away)`;
+          status.style.color = "var(--danger)";
+        } else {
+          status.textContent = result.error || "An error occurred.";
+          status.style.color = "var(--danger)";
         }
-
-        function submit(position, name, action) {
-            const status = document.getElementById("status");
-            const btn = document.getElementById("submitBtn");
-
-            const webAppUrl = "https://script.google.com/macros/s/AKfycbynNxiPxcfFSIBFZ5TsTX-2UJMXagIipm6isKpUMiBy1SuRCC0vyhxaY6Yr4bJknKHTDQ/exec";
-
-            status.textContent = "Submitting attendance…";
-            status.style.color = "";
-
-            fetch(webAppUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    name: name,
-                    action: action,
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
-                }),
-                redirect: "follow"
-            })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.status === "VALID") {
-                        status.textContent = `Success ✔ (${result.distance}m from office)`;
-                        status.style.color = "var(--success)";
-                    } else if (result.status === "OUT_OF_RANGE") {
-                        status.textContent = `Outside office ❌ (${result.distance}m away)`;
-                        status.style.color = "var(--danger)";
-                    } else {
-                        status.textContent = result.error || "An error occurred.";
-                        status.style.color = "var(--danger)";
-                    }
-                })
-                .catch(error => {
-                    status.textContent = "Submission failed. Check your internet connection.";
-                    status.style.color = "var(--danger)";
-                    console.error("Error:", error);
-                })
-                .finally(() => {
-                    btn.disabled = false;
-                });
-        }
-    </script>
+      })
+      .catch(error => {
+        status.textContent = "Submission failed. Check your internet connection.";
+        status.style.color = "var(--danger)";
+        console.error("Error:", error);
+      })
+      .finally(() => {
+        btn.disabled = false;
+      });
+    }
+  </script>
 </body>
-
 </html>
