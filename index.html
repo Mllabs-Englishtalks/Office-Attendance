@@ -140,50 +140,54 @@
         }
 
         function submit(position, name, action) {
-            const status = document.getElementById("status");
-            const btn = document.getElementById("submitBtn");
+  const status = document.getElementById("status");
+  const btn = document.getElementById("submitBtn");
 
-            const webAppUrl = "https://script.google.com/macros/s/AKfycbynNxiPxcfFSIBFZ5TsTX-2UJMXagIipm6isKpUMiBy1SuRCC0vyhxaY6Yr4bJknKHTDQ/exec";
+  const webAppUrl = "https://script.google.com/macros/s/AKfycbynNxiPxcfFSIBFZ5TsTX-2UJMXagIipm6isKpUMiBy1SuRCC0vyhxaY6Yr4bJknKHTDQ/exec";
 
-            status.textContent = "Submitting attendance…";
-            status.style.color = "";
+  status.textContent = "Submitting attendance…";
+  status.style.color = "";
 
-            fetch(webAppUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    name: name,
-                    action: action,
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
-                }),
-                redirect: "follow"
-            })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.status === "VALID") {
-                        status.textContent = `Success ✔ (${result.distance}m from office)`;
-                        status.style.color = "var(--success)";
-                    } else if (result.status === "OUT_OF_RANGE") {
-                        status.textContent = `Outside office ❌ (${result.distance}m away)`;
-                        status.style.color = "var(--danger)";
-                    } else {
-                        status.textContent = result.error || "An error occurred.";
-                        status.style.color = "var(--danger)";
-                    }
-                })
-                .catch(error => {
-                    status.textContent = "Submission failed. Check your internet connection.";
-                    status.style.color = "var(--danger)";
-                    console.error("Error:", error);
-                })
-                .finally(() => {
-                    btn.disabled = false;
-                });
-        }
+  fetch(webAppUrl, {
+    method: "POST",
+    headers: { 
+      "Content-Type": "text/plain"  // This bypasses preflight!
+    },
+    body: JSON.stringify({
+      name: name,
+      action: action,
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    }),
+    redirect: "follow"  // Critical for Google Apps Script
+  })
+  .then(response => {
+    if (!response.ok) throw new Error("Network response was not ok");
+    return response.json();
+  })
+  .then(result => {
+    if (result.status === "VALID") {
+      status.textContent = `Success ✔ (${result.distance}m from office)`;
+      status.style.color = "var(--success)";
+    } else if (result.status === "OUT_OF_RANGE") {
+      status.textContent = `Outside office ❌ (${result.distance}m away)`;
+      status.style.color = "var(--danger)";
+    } else {
+      status.textContent = result.error || "An error occurred.";
+      status.style.color = "var(--danger)";
+    }
+  })
+  .catch(error => {
+    status.textContent = "Submission failed. Check connection or try again.";
+    status.style.color = "var(--danger)";
+    console.error("Error:", error);
+  })
+  .finally(() => {
+    btn.disabled = false;
+  });
+}
     </script>
 </body>
+
 
 </html>
